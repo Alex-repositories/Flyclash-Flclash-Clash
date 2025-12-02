@@ -465,7 +465,7 @@ function overwriteProxyGroups(params) {
         US: "(美国|US|United States|America|🇺🇸)",
         UK: "(英国|UK|United Kingdom|🇬🇧)",
         FR: "(法国|FR|France|🇫🇷)",
-        DE: "(德国|DE|Germany|🇩🇪)"
+        DE: "(德国|DE|Germany|🇩🇪)",
         NL: "(荷兰|NL|Netherlands|🇳🇱)"
     };
     const allCountryTerms = Object.values(includeTerms).join("|");
