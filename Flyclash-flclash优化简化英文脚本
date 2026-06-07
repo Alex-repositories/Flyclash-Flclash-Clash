@@ -49,7 +49,6 @@ function overwriteBasicOptions(params) {
                     ports: [443, 8443],
                 },
             },
-            // 修正米家及谷歌推送、苹果推送的嗅探跳过规则，防止安卓端通知延迟
             "skip-domain": ["+.mesh.mihome.io", "+.push.apple.com", "+.push.googleapis.com", "+.mtalk.google.com"]
         },
     };
@@ -443,7 +442,6 @@ function overwriteTunnel(params) {
         "auto-route": true,
         "auto-detect-interface": true,
         "strict-route": false,
-        // 为安卓端补充核心的局域网排除，防止开启VPN时连不上家里的智能设备和NAS
         "route-exclude-address": ["10.0.0.0/8", "172.16.0.0/12", "192.168.0.0/16", "100.64.0.0/10"],
     };
     params.tun = { ...tunnelOptions };
@@ -536,7 +534,7 @@ function overwriteProxyGroups(params) {
             type: "load-balance",
             url: "https://cp.cloudflare.com/generate_204",
             interval: 3600,
-            lazy: true, // ⚙️ 修正：在此处补上了缺失的英文逗号
+            lazy: true, 
             strategy: loadBalanceStrategy,
             proxies: allProxies,
             icon: "https://raw.githubusercontent.com/Orz-3/mini/master/Color/Available.png"
