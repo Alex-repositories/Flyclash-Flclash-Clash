@@ -60,7 +60,6 @@ function overwriteBasicOptions(params) {
                     ports: [443, 8443],
                 },
             },
-            // 【优化项 3】扩充安卓端常用大厂域名的绕过嗅探列表，减少高频 App 延迟
             "skip-domain": [
                 "+.mesh.mihome.io", 
                 "+.push.apple.com", 
@@ -91,7 +90,6 @@ function overwriteDns(params) {
             "https://doh.pub/dns-query"
         ],
 
-        //增加多节点和传统 UDP 备份，防止单一 DoH 挂掉导致节点域名无法解析
         "proxy-server-nameserver": [
             "https://223.5.5.5/dns-query",
             "https://doh.pub/dns-query",
@@ -495,7 +493,6 @@ function overwriteProxyGroups(params) {
         SG: "(新加坡|狮城|SG|Singapore|🇸🇬)",
         JP: "(日本|JP|Japan|🇯🇵)",
         US: "(美国|US|United States|America|🇺🇸)",
-        NL: "(荷兰|NL|Netherlands|🇳🇱)"
     };
     const allCountryTerms = Object.values(includeTerms).join("|");
 
@@ -507,9 +504,6 @@ function overwriteProxyGroups(params) {
         { name: "US-自动", regex: new RegExp(`^(?=.*${includeTerms.US})(?!.*${excludeTerms}).*$`, "i"), isMain: true },
         { name: "OR-自动", regex: new RegExp(`^(?!.*(?:${allCountryTerms}|${excludeTerms})).*$`, "i") },
         { name: "0.1-自动", regex: new RegExp(`^(?=.*0\\.1)(?!.*${excludeTerms}).*$`, "i"), isMain: true },
-        { name: "0.1-日本", regex: new RegExp(`^(?=.*0\\.1)(?=.*(?:日本|Japan|JP|🇯🇵))(?!.*${excludeTerms}).*$`, "i"), isMain: true },
-        { name: "0.1-美国", regex: new RegExp(`^(?=.*0\\.1)(?=.*(?:美国|USA|US|🇺🇸))(?!.*${excludeTerms}).*$`, "i"), isMain: true },
-        { name: "0.1-荷兰", regex: new RegExp(`^(?=.*0\\.1)(?=.*(?:荷兰|Netherlands|NL|🇳🇱))(?!.*${excludeTerms}).*$`, "i") },
     ];
 
     const autoProxyGroups = autoProxyGroupRegexs
@@ -553,7 +547,7 @@ function overwriteProxyGroups(params) {
     const baseProxyOptions = ["Proxy", "DIRECT"];
     // 动态拼接 YouTube, Telegram 等组的 proxies 备选项
     const dynamicProxies = [...baseProxyOptions];
-    const targetAutoGroups = ["HK-自动", "JP-自动", "SG-自动", "US-自动", "OR-自动", "0.1-自动", "0.1-日本", "0.1-美国", "0.1-荷兰"];
+    const targetAutoGroups = ["HK-自动", "JP-自动", "SG-自动", "US-自动", "OR-自动", "0.1-自动"];
     targetAutoGroups.forEach(name => {
         if (validAutoGroupNames.includes(name)) dynamicProxies.push(name);
     });
@@ -570,9 +564,9 @@ function overwriteProxyGroups(params) {
             name: "Auto",
             type: "select",
             icon: "https://i.postimg.cc/zByFYkvP/magic-wand.png",
-            // 【优化项 4】过滤掉因没有节点而未生成的“空”自动测速组
-            proxies: ["All-自动", "HK-自动", "JP-自动", "SG-自动", "US-自动", "OR-自动", "0.1-自动", "0.1-日本", "0.1-美国", "0.1-荷兰"].filter(name => name === "All-自动" || validAutoGroupNames.includes(name)),
-        },
+            //过滤掉因没有节点而未生成的“空”自动测速组
+            proxies: ["All-自动", "HK-自动", "JP-自动", "SG-自动", "US-自动", "OR-自动", "0.1-自动"].filter(name => name === "All-自动" || validAutoGroupNames.includes(name)),
+        }，
         {
             name: "Nodes",
             type: "load-balance",
