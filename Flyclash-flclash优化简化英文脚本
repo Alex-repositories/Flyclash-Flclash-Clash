@@ -1,28 +1,39 @@
-// FlyClash Configuration Script (Optimized & Fixed)
-
 function main(params) {
-    if (!params || !params.proxies || !Array.isArray(params.proxies)) return params;
-    
-    // 全局过滤：移除名称含有机场通告、剩余流量、到期时间等无效提示节点
-    const globalExcludeKeywords = /(邀请返佣|goflybit\.com|重新从网站获取订阅|公告信息|重置|套餐|剩余)/i;
-    params.proxies = params.proxies.filter(p => !globalExcludeKeywords.test(p.name));
+    if (!params || !params.proxies || !Array.isArray(params.proxies)) {
+        console.error("Invalid params or proxies not found");
+        return params;
+    }
 
-    overwriteBasicOptions(params);
-    overwriteDns(params);
-    overwriteFakeIpFilter(params);
-    overwriteNameserverPolicy(params);
-    overwriteHosts(params);
-    overwriteTunnel(params);
-    overwriteProxyGroups(params);
-    overwriteRules(params);
+    // 全局过滤：移除名称含有特定关键词的节点
+    const globalExcludeKeywords = /邀请返佣|goflybit\.com|重新从网站获取订阅|公告信息|重置|套餐|剩余/i;
+    const beforeCount = params.proxies.length;
+    params.proxies = params.proxies.filter(p => !globalExcludeKeywords.test(p.name));
+    const filteredCount = beforeCount - params.proxies.length;
+    if (filteredCount > 0) {
+        console.log(`已过滤 ${filteredCount} 个无效节点`);
+    }
+
+    try {
+        overwriteBasicOptions(params);
+        overwriteDns(params);
+        overwriteFakeIpFilter(params);
+        overwriteNameserverPolicy(params);
+        overwriteHosts(params);
+        overwriteTunnel(params);
+        overwriteProxyGroups(params);
+        overwriteRules(params);
+        console.log("Configuration loaded successfully");
+    } catch (error) {
+        console.error("Script execution failed:", error);
+    }
+
     return params;
 }
 
-// Overwrite Basic Options
 function overwriteBasicOptions(params) {
     const otherOptions = {
         "mixed-port": 7897,
-        "allow-lan": true,
+        "allow-lan": false,
         mode: "rule",
         "log-level": "warning",
         ipv6: false,
@@ -49,7 +60,17 @@ function overwriteBasicOptions(params) {
                     ports: [443, 8443],
                 },
             },
-            "skip-domain": ["+.mesh.mihome.io", "+.push.apple.com", "+.push.googleapis.com", "+.mtalk.google.com"]
+            // 【优化项 3】扩充安卓端常用大厂域名的绕过嗅探列表，减少高频 App 延迟
+            "skip-domain": [
+                "+.mesh.mihome.io", 
+                "+.push.apple.com", 
+                "+.push.googleapis.com", 
+                "+.mtalk.google.com",
+                "*.baidu.com", 
+                "*.zhizhuxizuo.com", 
+                "+.tencent.com", 
+                "+.mmstat.com"
+            ]
         },
     };
     Object.keys(otherOptions).forEach((key) => {
@@ -57,48 +78,67 @@ function overwriteBasicOptions(params) {
     });
 }
 
-// Overwrite DNS
 function overwriteDns(params) {
-    const dnsList = [
-        "https://223.5.5.5/dns-query",
-        "https://doh.pub/dns-query",
-    ];
-
-    const proxyDnsList = [
-        "https://223.5.5.5/dns-query",
-    ];
-
     const dnsOptions = {
         enable: true,
-        "prefer-h3": false,
+        "prefer-h3": false, 
         ipv6: false,
         "enhanced-mode": "fake-ip",
         "fake-ip-range": "198.18.0.1/16",
-        nameserver: dnsList,
-        "proxy-server-nameserver": proxyDnsList,
+
+        nameserver: [
+            "https://223.5.5.5/dns-query",
+            "https://doh.pub/dns-query"
+        ],
+
+        //增加多节点和传统 UDP 备份，防止单一 DoH 挂掉导致节点域名无法解析
+        "proxy-server-nameserver": [
+            "https://223.5.5.5/dns-query",
+            "https://doh.pub/dns-query",
+            "119.29.29.29"
+        ],
         fallback: [
             "https://1.1.1.1/dns-query",
             "https://dns.google/dns-query"
         ],
+
         "default-nameserver": ["223.5.5.5", "119.29.29.29"],
+        listen: "127.0.0.1:1053",
+        "cache-algorithm": "lru",
+        "cache-size": 4096,
     };
     params.dns = { ...dnsOptions };
 }
 
-// Overwrite DNS Fake IP Filter
 function overwriteFakeIpFilter(params) {
     const fakeIpFilter = [
-        "*.m2m", "*.bogon", "*.lan", "*.local", "*.internal", "*.localdomain",
-        "+.injections.adguard.org", "+.local.adguard.org", "+.home.arpa",
-        "dns.msftncsi.com", "*.srv.nintendo.net", "*.stun.playstation.net",
-        "xbox.*.microsoft.com", "*.xboxlive.com", "*.turn.twilio.com",
-        "*.stun.twilio.com", "stun.syncthing.net", "stun.*", "*.sslip.io",
-        "*.nip.io", "*.example.com", "+.internal.corp"
+        "*.m2m",
+        "*.bogon",
+        "*.lan",
+        "*.local",
+        "*.internal",
+        "*.localdomain",
+        "+.injections.adguard.org",
+        "+.local.adguard.org",
+        "+.home.arpa",
+        "dns.msftncsi.com",
+        "*.srv.nintendo.net",
+        "*.stun.playstation.net",
+        "xbox.*.microsoft.com",
+        "*.xboxlive.com",
+        "*.turn.twilio.com",
+        "*.stun.twilio.com",
+        "stun.syncthing.net",
+        "stun.*",
+        "*.sslip.io",
+        "*.nip.io",
+        "*.example.com",
+        "+.internal.corp",
     ];
+    if (!params.dns) params.dns = {}; 
     params.dns["fake-ip-filter"] = fakeIpFilter;
 }
 
-// Overwrite DNS Nameserver Policy
 function overwriteNameserverPolicy(params) {
     const nameserverPolicy = {
         "dns.alidns.com": "quic://223.5.5.5:853",
@@ -417,86 +457,84 @@ function overwriteNameserverPolicy(params) {
         "*.local": "system",
         "*.internal": "system",
         "*.localdomain": "system",
-        "+.home.arpa": "system"
+        "+.home.arpa": "system",
     };
     params.dns["nameserver-policy"] = nameserverPolicy;
 }
 
-// Overwrite Hosts
 function overwriteHosts(params) {
     const hosts = {
-        "dns.alidns.com": ['223.5.5.5', '223.6.6.6', '2400:3200:baba::1', '2400:3200::1'],
-        "doh.pub": ['120.53.53.53', '1.12.12.12'],
+        "dns.alidns.com": ["223.5.5.5", "223.6.6.6", "2400:3200:baba::1", "2400:3200::1"],
+        "doh.pub": ["120.53.53.53", "1.12.12.12"],
         "cdn.jsdelivr.net": "cdn.jsdelivr.net.cdn.cloudflare.net"
     };
     params.hosts = hosts;
 }
 
-// Overwrite Tunnel
 function overwriteTunnel(params) {
     const tunnelOptions = {
         enable: true,
         stack: "mixed",
-        device: "tun0",
-        "dns-hijack": ["any:53", "tcp://any:53"],
+        device: "TUN",
+        "dns-hijack": ["any:53"],
         "auto-route": true,
         "auto-detect-interface": true,
         "strict-route": false,
+        "mtu": 1380,
         "route-exclude-address": ["10.0.0.0/8", "172.16.0.0/12", "192.168.0.0/16", "100.64.0.0/10"],
     };
     params.tun = { ...tunnelOptions };
 }
 
-// Overwrite Proxy Groups
 function overwriteProxyGroups(params) {
     const allProxies = params["proxies"].map((e) => e.name);
-    // 为过滤条件增加小括号，防止因正则分流逻辑导致的正则拦截穿透
-    const excludeTerms = "(剩余|到期|主页|官网|游戏|关注|网站|地址|有效|网址|禁止|邮箱|发布|客服|订阅|节点|问题|联系)";
+    const excludeTerms = /(剩余|到期|主页|官网|游戏|关注|网站|地址|有效|网址|禁止|邮箱|发布|客服|订阅|节点|问题|联系|邀请返佣|goflybit\.com|重新从网站获取订阅|公告信息|重置|套餐)/i;
     const includeTerms = {
         HK: "(香港|HK|Hong|🇭🇰)",
         TW: "(台湾|TW|Taiwan|Wan|🇹🇼|🇨🇳)",
         SG: "(新加坡|狮城|SG|Singapore|🇸🇬)",
         JP: "(日本|JP|Japan|🇯🇵)",
-        KR: "(韩国|韓|KR|Korea|🇰🇷)",
         US: "(美国|US|United States|America|🇺🇸)",
-        UK: "(英国|UK|United Kingdom|🇬🇧)",
-        FR: "(法国|FR|France|🇫🇷)",
-        DE: "(德国|DE|Germany|🇩🇪)",
         NL: "(荷兰|NL|Netherlands|🇳🇱)"
     };
     const allCountryTerms = Object.values(includeTerms).join("|");
+
     const autoProxyGroupRegexs = [
         { name: "HK-自动", regex: new RegExp(`^(?=.*${includeTerms.HK})(?!.*${excludeTerms}).*$`, "i") },
         { name: "TW-自动", regex: new RegExp(`^(?=.*${includeTerms.TW})(?!.*${excludeTerms}).*$`, "i") },
-        { name: "SG-自动", regex: new RegExp(`^(?=.*${includeTerms.SG})(?!.*${excludeTerms}).*$`, "i") },
-        { name: "JP-自动", regex: new RegExp(`^(?=.*${includeTerms.JP})(?!.*${excludeTerms}).*$`, "i") },
-        { name: "KR-自动", regex: new RegExp(`^(?=.*${includeTerms.KR})(?!.*${excludeTerms}).*$`, "i") },
-        { name: "US-自动", regex: new RegExp(`^(?=.*${includeTerms.US})(?!.*${excludeTerms}).*$`, "i") },
-        { name: "UK-自动", regex: new RegExp(`^(?=.*${includeTerms.UK})(?!.*${excludeTerms}).*$`, "i") },
-        { name: "FR-自动", regex: new RegExp(`^(?=.*${includeTerms.FR})(?!.*${excludeTerms}).*$`, "i") },
-        { name: "DE-自动", regex: new RegExp(`^(?=.*${includeTerms.DE})(?!.*${excludeTerms}).*$`, "i") },
-        { name: "NL-自动", regex: new RegExp(`^(?=.*${includeTerms.NL})(?!.*${excludeTerms}).*$`, "i") },
-        { name: "0.1-自动", regex: new RegExp(`^(?=.*0\.1)(?!.*${excludeTerms}).*$`, "i") },
-        { name: "OR-自动", regex: new RegExp(`^(?!.*(?:${allCountryTerms}|${excludeTerms})).*$`, "i") }
+        { name: "SG-自动", regex: new RegExp(`^(?=.*${includeTerms.SG})(?!.*${excludeTerms}).*$`, "i"), isMain: true },
+        { name: "JP-自动", regex: new RegExp(`^(?=.*${includeTerms.JP})(?!.*${excludeTerms}).*$`, "i"), isMain: true },
+        { name: "US-自动", regex: new RegExp(`^(?=.*${includeTerms.US})(?!.*${excludeTerms}).*$`, "i"), isMain: true },
+        { name: "OR-自动", regex: new RegExp(`^(?!.*(?:${allCountryTerms}|${excludeTerms})).*$`, "i") },
+        { name: "0.1-自动", regex: new RegExp(`^(?=.*0\\.1)(?!.*${excludeTerms}).*$`, "i"), isMain: true },
+        { name: "0.1-日本", regex: new RegExp(`^(?=.*0\\.1)(?=.*(?:日本|Japan|JP|🇯🇵))(?!.*${excludeTerms}).*$`, "i"), isMain: true },
+        { name: "0.1-美国", regex: new RegExp(`^(?=.*0\\.1)(?=.*(?:美国|USA|US|🇺🇸))(?!.*${excludeTerms}).*$`, "i"), isMain: true },
+        { name: "0.1-荷兰", regex: new RegExp(`^(?=.*0\\.1)(?=.*(?:荷兰|Netherlands|NL|🇳🇱))(?!.*${excludeTerms}).*$`, "i") },
     ];
 
     const autoProxyGroups = autoProxyGroupRegexs
-        .map((item) => ({
-            name: item.name,
-            type: "url-test",
-            url: "https://cp.cloudflare.com/generate_204",
-            interval: 300,
-            tolerance: 50,
-            proxies: getProxiesByRegex(params, item.regex),
-            hidden: true,
-        }))
+        .map((item) => {
+            const baseConfig = {
+                name: item.name,
+                type: "url-test",
+                url: "https://cp.cloudflare.com/generate_204",
+                interval: 300,
+                tolerance: 50,
+                proxies: getProxiesByRegex(params, item.regex),
+                hidden: true,
+            };
+            if (!item.isMain) {
+                baseConfig.lazy = true;
+            }
+            return baseConfig;
+        }) 
         .filter((item) => item.proxies.length > 0);
 
     const manualProxyGroups = [
         {
             name: "Other",
             regex: new RegExp(`^(?!.*(?:${allCountryTerms}|${excludeTerms})).*$`, "i"),
-            icon: "https://i.postimg.cc/HLYLHSwk/earth.png"
+            icon: "https://i.postimg.cc/DfgxNsyj/retouch-2026060200414907.png"
         },
     ];
 
@@ -510,92 +548,113 @@ function overwriteProxyGroups(params) {
         }))
         .filter((item) => item.proxies.length > 0);
 
-    const loadBalanceStrategy = "consistent-hashing";
+    const validAutoGroupNames = autoProxyGroups.map(g => g.name);
+    const validManualGroupNames = manualProxyGroupsConfig.map(g => g.name);
+    const baseProxyOptions = ["Proxy", "DIRECT"];
+    // 动态拼接 YouTube, Telegram 等组的 proxies 备选项
+    const dynamicProxies = [...baseProxyOptions];
+    const targetAutoGroups = ["HK-自动", "JP-自动", "SG-自动", "US-自动", "OR-自动", "0.1-自动", "0.1-日本", "0.1-美国", "0.1-荷兰"];
+    targetAutoGroups.forEach(name => {
+        if (validAutoGroupNames.includes(name)) dynamicProxies.push(name);
+    });
 
     const groups = [
         {
             name: "Proxy",
             type: "select",
-            icon: "https://raw.githubusercontent.com/Orz-3/mini/master/Color/Static.png",
-            proxies: [
-                "Auto",
-                "Other",
-                "DIRECT",
-            ],
+            icon: "https://i.postimg.cc/vBQvq39K/planet-earth.png",
+            // 确保 Other 组存在才写入，否则只留 Auto 和 DIRECT
+            proxies: ["Auto", "DIRECT", ...validManualGroupNames],
         },
         {
             name: "Auto",
             type: "select",
-            icon: "https://raw.githubusercontent.com/Orz-3/mini/master/Color/Urltest.png",
-            proxies: ["All-自动", "HK-自动", "JP-自动", "SG-自动", "US-自动", "KR-自动", "UK-自动", "FR-自动", "DE-自动", "TW-自动", "NL-自动", "OR-自动", "0.1-自动"],
+            icon: "https://i.postimg.cc/zByFYkvP/magic-wand.png",
+            // 【优化项 4】过滤掉因没有节点而未生成的“空”自动测速组
+            proxies: ["All-自动", "HK-自动", "JP-自动", "SG-自动", "US-自动", "OR-自动", "0.1-自动", "0.1-日本", "0.1-美国", "0.1-荷兰"].filter(name => name === "All-自动" || validAutoGroupNames.includes(name)),
         },
         {
-            name: "Node Status",
+            name: "Nodes",
             type: "load-balance",
             url: "https://cp.cloudflare.com/generate_204",
             interval: 3600,
-            lazy: true, 
-            strategy: loadBalanceStrategy,
-            proxies: allProxies,
-            icon: "https://raw.githubusercontent.com/Orz-3/mini/master/Color/Available.png"
+            lazy: true,
+            strategy: "consistent-hashing",
+            proxies: allProxies.filter(p => !excludeTerms.test(p)),
+            icon: "https://i.postimg.cc/cLwsXKWq/balance-2.png"
         },
         {
             name: "All-自动",
             type: "url-test",
             url: "https://cp.cloudflare.com/generate_204",
-            interval: 300,
-            tolerance: 50,
+            interval: 600,
+            tolerance: 25,
             proxies: allProxies,
             hidden: true,
         },
         {
+            name: "YouTube",
+            type: "select",
+            proxies: dynamicProxies,
+            icon: "https://i.postimg.cc/nhfMfs5L/youtube-(1).png"
+        },
+        {
             name: "Telegram",
             type: "select",
-            proxies: ["Proxy", "DIRECT", "HK-自动", "JP-自动", "SG-自动", "US-自动", "KR-自动", "UK-自动", "FR-自动", "DE-自动", "TW-自动", "NL-自动", "OR-自动", "0.1-自动"],
+            proxies: dynamicProxies,
             icon: "https://raw.githubusercontent.com/Orz-3/mini/master/Color/Telegram.png"
         },
         {
             name: "AIGC",
             type: "select",
-            proxies: ["Proxy", "DIRECT", "HK-自动", "JP-自动", "SG-自动", "US-自动", "KR-自动", "UK-自动", "FR-自动", "DE-自动", "TW-自动", "NL-自动", "OR-自动", "0.1-自动"],
-            icon: "https://raw.githubusercontent.com/Orz-3/mini/master/Color/OpenAI.png"
-        },
-        {
-            name: "Apple",
-            type: "select",
-            proxies: ["Proxy", "DIRECT", "HK-自动", "JP-自动", "SG-自动", "US-自动", "KR-自动", "UK-自动", "FR-自动", "DE-自动", "TW-自动", "NL-自动", "OR-自动", "0.1-自动"],
-            icon: "https://raw.githubusercontent.com/Orz-3/mini/master/Color/Apple.png"
+            proxies: dynamicProxies,
+            icon: "https://i.postimg.cc/4yVFmLXp/chatgpt-logo-openai-gpt-ia-line-icon-264985.png"
         },
         {
             name: "Microsoft",
             type: "select",
-            proxies: ["Proxy", "DIRECT", "HK-自动", "JP-自动", "SG-自动", "US-自动", "KR-自动", "UK-自动", "FR-自动", "DE-自动", "TW-自动", "NL-自动", "OR-自动", "0.1-自动"],
-            icon: "https://raw.githubusercontent.com/Orz-3/mini/master/Color/Microsoft.png"
+            proxies: dynamicProxies,
+            icon: "https://i.postimg.cc/90FsgtJy/microsoft-1.png"
+        },
+        {
+            name: "Apple",
+            type: "select",
+            proxies: dynamicProxies,
+            icon: "https://i.postimg.cc/448nqp0p/apple-1.png"
         },
     ];
-
     groups.push(...autoProxyGroups);
     groups.push(...manualProxyGroupsConfig);
     params["proxy-groups"] = groups;
 }
 
-// Overwrite Rules
 function overwriteRules(params) {
+    const performanceRules = [
+        "DOMAIN-SUFFIX,weixin.qq.com,DIRECT",
+        "DOMAIN-SUFFIX,wechat.com,DIRECT",
+        "DOMAIN-SUFFIX,wx.qq.com,DIRECT",
+        "DOMAIN-SUFFIX,servicewechat.com,DIRECT",
+        "DOMAIN-SUFFIX,weixinbridge.com,DIRECT",
+        "DOMAIN-SUFFIX,wechatpay.com,DIRECT",
+        "DOMAIN-SUFFIX,weixin.com,DIRECT",
+        "DOMAIN,szbak.weixin.qq.com,DIRECT",
+        "DOMAIN,short.weixin.qq.com,DIRECT",
+        "DOMAIN-KEYWORD,weixin,DIRECT",
+        "DOMAIN-KEYWORD,wechat,DIRECT",
+    ];
+    const customRules = [
+        "DOMAIN-SUFFIX,landrop.app,DIRECT",
+        "DOMAIN-SUFFIX,v.ikanbot.com,DIRECT",
+        "DOMAIN-SUFFIX,aikanbot.com,DIRECT",
+    ];
     const adNonipRules = [
         "RULE-SET,reject_non_ip,REJECT",
         "RULE-SET,reject_domainset,REJECT",
         "RULE-SET,reject_non_ip_drop,REJECT-DROP",
         "RULE-SET,reject_non_ip_no_drop,REJECT"
     ];
-
-    const customRules = [
-        // 建议置顶高频的微信/国内应用直连规则，防止被外界规则阻断
-        "DOMAIN-SUFFIX,weixin.qq.com,DIRECT",
-        "DOMAIN-SUFFIX,wechat.com,DIRECT",
-        "DOMAIN-KEYWORD,weixin,DIRECT"
-    ];
-
     const nonipRules = [
+        "RULE-SET,youtube,YouTube",
         "RULE-SET,cdn_domainset,Proxy",
         "RULE-SET,cdn_non_ip,Proxy",
         "RULE-SET,stream_non_ip,Proxy",
@@ -613,13 +672,6 @@ function overwriteRules(params) {
         "RULE-SET,direct_non_ip,DIRECT",
         "RULE-SET,lan_non_ip,DIRECT"
     ];
-
-    const allNonipRules = [
-        ...adNonipRules,
-        ...customRules,
-        ...nonipRules
-    ];
-
     const ipRules = [
         "RULE-SET,reject_ip,REJECT",
         "RULE-SET,telegram_ip,Telegram",
@@ -629,13 +681,23 @@ function overwriteRules(params) {
         "RULE-SET,china_ip,DIRECT",
         "MATCH,Proxy"
     ];
-
     const rules = [
-        ...allNonipRules,
+        ...performanceRules,
+        ...adNonipRules,
+        ...customRules,
+        ...nonipRules,
         ...ipRules
     ];
-
     const ruleProviders = {
+        youtube: {
+            type: "http",
+            behavior: "classical",
+            url: "https://cdn.jsdelivr.net/gh/blackmatrix7/ios_rule_script@master/rule/Clash/YouTube/YouTube.yaml",
+            path: "./rule_set/sukkaw_ruleset/stream_youtube.txt",
+            interval: 43200,
+            format: "yaml",
+            proxy: "Proxy"
+         },
         reject_non_ip_no_drop: {
             type: "http",
             behavior: "classical",
@@ -871,7 +933,6 @@ function overwriteRules(params) {
             proxy: "Proxy"
         }
     };
-
     params["rule-providers"] = ruleProviders;
     params["rules"] = rules;
 }
