@@ -651,7 +651,6 @@ function overwriteRules(params) {
     const allNonipRules = [
         ...adNonipRules,
         ...customRules,
-        ...serviceRules,
         ...nonipRules
     ];
     const ipRules = [
@@ -664,13 +663,10 @@ function overwriteRules(params) {
         "MATCH,Proxy"
     ];
     const rules = [
-        ...performanceRules,
         ...customRules,
         ...adNonipRules,
-        ...serviceRuleSets,      // 新增的规则集引用
         ...nonipRules,
         ...ipRules
-        ...allNonipRules,
     ];
     const ruleProviders = {
         reject_non_ip_no_drop: {
