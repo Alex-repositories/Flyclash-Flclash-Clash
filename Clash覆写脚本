@@ -547,55 +547,55 @@ function overwriteProxyGroups(params) {
         {
             name: "AIGC",
             type: "select",
-            proxies: ["Proxy", "DIRECT", "HK-自动", "TW-自动", "JP-自动", "SG-自动", "US-自动", "KR-自动", "UK-自动", "FR-自动", "DE-自动", "0.1-自动"],
+            proxies: ["Proxy", "Select", "DIRECT", "HK-自动", "TW-自动", "JP-自动", "SG-自动", "US-自动", "KR-自动", "UK-自动", "FR-自动", "DE-自动", "0.1-自动"],
             icon: "https://cdn.jsdelivr.net/gh/Alex-repositories/icons_01@main/AI.png"
         },
         {
             name: "Apple",
             type: "select",
-            proxies: ["Proxy", "DIRECT", "HK-自动", "TW-自动", "JP-自动", "SG-自动", "US-自动", "KR-自动", "UK-自动", "FR-自动", "DE-自动", "0.1-自动"],
+            proxies: ["Proxy", "Select", "DIRECT", "HK-自动", "TW-自动", "JP-自动", "SG-自动", "US-自动", "KR-自动", "UK-自动", "FR-自动", "DE-自动", "0.1-自动"],
             icon: "https://cdn.jsdelivr.net/gh/Alex-repositories/icons_01@main/Apple.png"
         },
         {
             name: "Google",
             type: "select",
-            proxies: ["Proxy", "DIRECT", "HK-自动", "TW-自动", "JP-自动", "SG-自动", "US-自动", "KR-自动", "UK-自动", "FR-自动", "DE-自动", "0.1-自动"],
+            proxies: ["Proxy", "Select", "DIRECT", "HK-自动", "TW-自动", "JP-自动", "SG-自动", "US-自动", "KR-自动", "UK-自动", "FR-自动", "DE-自动", "0.1-自动"],
             icon: "https://cdn.jsdelivr.net/gh/Alex-repositories/icons_01@main/Google.png"
         },
         {
             name: "Instagram",
             type: "select",
-            proxies: ["Proxy", "DIRECT", "HK-自动", "TW-自动", "JP-自动", "SG-自动", "US-自动", "KR-自动", "UK-自动", "FR-自动", "DE-自动", "0.1-自动"],
+            proxies: ["Proxy", "Select", "DIRECT", "HK-自动", "TW-自动", "JP-自动", "SG-自动", "US-自动", "KR-自动", "UK-自动", "FR-自动", "DE-自动", "0.1-自动"],
             icon: "https://cdn.jsdelivr.net/gh/Alex-repositories/icons_01@main/Instagram.png"
         },
         {
             name: "Microsoft",
             type: "select",
-            proxies: ["Proxy", "DIRECT", "HK-自动", "TW-自动", "JP-自动", "SG-自动", "US-自动", "KR-自动", "UK-自动", "FR-自动", "DE-自动", "0.1-自动"],
+            proxies: ["Proxy", "Select", "DIRECT", "HK-自动", "TW-自动", "JP-自动", "SG-自动", "US-自动", "KR-自动", "UK-自动", "FR-自动", "DE-自动", "0.1-自动"],
             icon: "https://cdn.jsdelivr.net/gh/Alex-repositories/icons_01@main/Microsoft.png"
         },
         {
             name: "Netflix",
             type: "select",
-            proxies: ["Proxy", "DIRECT", "HK-自动",  "TW-自动","JP-自动", "SG-自动", "US-自动", "KR-自动", "UK-自动", "FR-自动", "DE-自动", "0.1-自动"],
+            proxies: ["Proxy", "Select", "DIRECT", "HK-自动",  "TW-自动","JP-自动", "SG-自动", "US-自动", "KR-自动", "UK-自动", "FR-自动", "DE-自动", "0.1-自动"],
             icon: "https://cdn.jsdelivr.net/gh/Alex-repositories/icons_01@main/Netflix.png"
         },
         {
             name: "Telegram",
             type: "select",
-            proxies: ["Proxy", "DIRECT", "HK-自动", "TW-自动", "JP-自动", "SG-自动", "US-自动", "KR-自动", "UK-自动", "FR-自动", "DE-自动", "0.1-自动"],
+            proxies: ["Proxy", "Select", "DIRECT", "HK-自动", "TW-自动", "JP-自动", "SG-自动", "US-自动", "KR-自动", "UK-自动", "FR-自动", "DE-自动", "0.1-自动"],
             icon: "https://cdn.jsdelivr.net/gh/Alex-repositories/icons_01@main/Telegram.png"
         },
         {
             name: "YouTube",
             type: "select",
-            proxies: ["Proxy", "DIRECT", "HK-自动", "TW-自动", "JP-自动", "SG-自动", "US-自动", "KR-自动", "UK-自动", "FR-自动", "DE-自动", "0.1-自动"],
+            proxies: ["Proxy", "Select", "DIRECT", "HK-自动", "TW-自动", "JP-自动", "SG-自动", "US-自动", "KR-自动", "UK-自动", "FR-自动", "DE-自动", "0.1-自动"],
             icon: "https://cdn.jsdelivr.net/gh/Alex-repositories/icons_01@main/Youtube.png"
         },
         {
             name: "X",
             type: "select",
-            proxies: ["Proxy", "DIRECT", "HK-自动", "TW-自动", "JP-自动", "SG-自动", "US-自动", "KR-自动", "UK-自动", "FR-自动", "DE-自动", "0.1-自动"],
+            proxies: ["Proxy", "Select", "DIRECT", "HK-自动", "TW-自动", "JP-自动", "SG-自动", "US-自动", "KR-自动", "UK-自动", "FR-自动", "DE-自动", "0.1-自动"],
             icon: "https://cdn.jsdelivr.net/gh/Alex-repositories/icons_01@main/Twitter.png"
         },
     ];
