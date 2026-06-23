@@ -1,7 +1,6 @@
 // Clash系通用覆写脚本
 function main(params) {
     if (!params || !params.proxies || !Array.isArray(params.proxies)) return params;
-    // 全局过滤：移除名称含有机场通告、剩余流量、到期时间等无效提示节点
     const globalExcludeKeywords = /(邀请返佣|goflybit\.com|重新从网站获取订阅|公告信息|重置|套餐|剩余)/i;
     params.proxies = params.proxies.filter(p => !globalExcludeKeywords.test(p.name));
 
@@ -16,7 +15,6 @@ function main(params) {
     return params;
 }
 
-// Overwrite Basic Options
 function overwriteBasicOptions(params) {
     const otherOptions = {
         "mixed-port": 7897,
@@ -419,7 +417,6 @@ function overwriteNameserverPolicy(params) {
     params.dns["nameserver-policy"] = nameserverPolicy;
 }
 
-// Overwrite Hosts
 function overwriteHosts(params) {
     const hosts = {
         "dns.alidns.com": ['223.5.5.5', '223.6.6.6', '2400:3200:baba::1', '2400:3200::1'],
@@ -429,7 +426,6 @@ function overwriteHosts(params) {
     params.hosts = hosts;
 }
 
-// Overwrite Tunnel
 function overwriteTunnel(params) {
     const tunnelOptions = {
         enable: true,
@@ -444,7 +440,6 @@ function overwriteTunnel(params) {
     params.tun = { ...tunnelOptions };
 }
 
-// Overwrite Proxy Groups
 function overwriteProxyGroups(params) {
     const allProxies = params["proxies"].map((e) => e.name);
     const excludeTerms = "(剩余|到期|主页|官网|游戏|关注|网站|地址|有效|网址|禁止|邮箱|发布|客服|订阅|节点|问题|联系)";
@@ -610,7 +605,6 @@ function overwriteProxyGroups(params) {
     params["proxy-groups"] = groups;
 }
 
-// Overwrite Rules
 function overwriteRules(params) {
     const adNonipRules = [
         "RULE-SET,reject_non_ip,REJECT",
