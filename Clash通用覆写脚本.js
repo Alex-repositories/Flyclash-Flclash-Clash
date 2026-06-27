@@ -542,7 +542,11 @@ function overwriteProxyGroups(params) {
             name: "Proxy",
             type: "select",
             icon: "https://cdn.jsdelivr.net/gh/Alex-repositories/icons_02@main/Proxy.png",
-            proxies: ["Auto", "Select", "DIRECT", "HK-手动", "TW-手动", "JP-手动", "SG-手动", "US-手动", "KR-手动", "UK-手动", "FR-手动", "DE-手动"],
+            proxies: [
+                "Auto",
+                "Select",
+                "DIRECT",
+            ],
         },
         {
             name: "Auto",
@@ -564,7 +568,67 @@ function overwriteProxyGroups(params) {
             tolerance: 50,
             proxies: allProxies,
             hidden: true,
-        }
+        },
+        {
+            name: "AIGC",
+            type: "select",
+            proxies: ["Proxy", "DIRECT", "HK-自动", "HK-手动", "TW-自动", "TW-手动", "JP-自动", "JP-手动", "SG-自动", "SG-手动", "US-自动", "US-手动",  "KR-自动", "KR-手动", "UK-自动", "UK-手动", "FR-自动", "FR-手动","DE-自动", "DE-手动", "0.x-自动"],
+            icon: "https://cdn.jsdelivr.net/gh/Alex-repositories/icons_02@main/AI.png"
+        },
+        {
+            name: "Apple",
+            type: "select",
+            proxies: ["Proxy", "DIRECT", "HK-自动", "HK-手动", "TW-自动", "TW-手动", "JP-自动", "JP-手动", "SG-自动", "SG-手动", "US-自动", "US-手动",  "KR-自动", "KR-手动", "UK-自动", "UK-手动", "FR-自动", "FR-手动","DE-自动", "DE-手动", "0.x-自动"],
+            icon: "https://cdn.jsdelivr.net/gh/Alex-repositories/icons_02@main/Apple.png"
+        },
+        {
+            name: "Google",
+            type: "select",
+            proxies: ["Proxy", "DIRECT", "HK-自动", "HK-手动", "TW-自动", "TW-手动", "JP-自动", "JP-手动", "SG-自动", "SG-手动", "US-自动", "US-手动",  "KR-自动", "KR-手动", "UK-自动", "UK-手动", "FR-自动", "FR-手动","DE-自动", "DE-手动", "0.x-自动"],
+            icon: "https://cdn.jsdelivr.net/gh/Alex-repositories/icons_02@main/Google.png"
+        },
+        {
+            name: "Instagram",
+            type: "select",
+            proxies: ["Proxy", "DIRECT", "HK-自动", "HK-手动", "TW-自动", "TW-手动", "JP-自动", "JP-手动", "SG-自动", "SG-手动", "US-自动", "US-手动",  "KR-自动", "KR-手动", "UK-自动", "UK-手动", "FR-自动", "FR-手动","DE-自动", "DE-手动", "0.x-自动"],
+            icon: "https://cdn.jsdelivr.net/gh/Alex-repositories/icons_02@main/Instagram.png"
+        },
+        {
+            name: "Microsoft",
+            type: "select",
+            proxies: ["Proxy", "DIRECT", "HK-自动", "HK-手动", "TW-自动", "TW-手动", "JP-自动", "JP-手动", "SG-自动", "SG-手动", "US-自动", "US-手动",  "KR-自动", "KR-手动", "UK-自动", "UK-手动", "FR-自动", "FR-手动","DE-自动", "DE-手动", "0.x-自动"],
+            icon: "https://cdn.jsdelivr.net/gh/Alex-repositories/icons_02@main/Microsoft.png"
+        },
+        {
+            name: "Netflix",
+            type: "select",
+            proxies: ["Proxy", "DIRECT", "HK-自动", "HK-手动", "TW-自动", "TW-手动", "JP-自动", "JP-手动", "SG-自动", "SG-手动", "US-自动", "US-手动",  "KR-自动", "KR-手动", "UK-自动", "UK-手动", "FR-自动", "FR-手动","DE-自动", "DE-手动", "0.x-自动"],
+            icon: "https://cdn.jsdelivr.net/gh/Alex-repositories/icons_02@main/Netflix.png"
+        },
+        {
+            name: "Telegram",
+            type: "select",
+            proxies: ["Proxy", "DIRECT", "HK-自动", "HK-手动", "TW-自动", "TW-手动", "JP-自动", "JP-手动", "SG-自动", "SG-手动", "US-自动", "US-手动",  "KR-自动", "KR-手动", "UK-自动", "UK-手动", "FR-自动", "FR-手动","DE-自动", "DE-手动", "0.x-自动"],
+            icon: "https://cdn.jsdelivr.net/gh/Alex-repositories/icons_02@main/Telegram.png"
+        },
+        {
+            name: "TikTok",
+            type: "select",
+            proxies: ["Proxy", "DIRECT", "HK-自动", "HK-手动", "TW-自动", "TW-手动", "JP-自动", "JP-手动", "SG-自动", "SG-手动", "US-自动", "US-手动",  "KR-自动", "KR-手动", "UK-自动", "UK-手动", "FR-自动", "FR-手动","DE-自动", "DE-手动", "0.x-自动"],
+            icon: "https://cdn.jsdelivr.net/gh/Alex-repositories/icons_02@main/Tiktok.png"
+        },
+        {
+            name: "YouTube",
+            type: "select",
+            proxies: ["Proxy", "DIRECT", "HK-自动", "HK-手动", "TW-自动", "TW-手动", "JP-自动", "JP-手动", "SG-自动", "SG-手动", "US-自动", "US-手动",  "KR-自动", "KR-手动", "UK-自动", "UK-手动", "FR-自动", "FR-手动","DE-自动", "DE-手动", "0.x-自动"],
+            icon: "https://cdn.jsdelivr.net/gh/Alex-repositories/icons_02@main/Youtube.png"
+        },
+        {
+            name: "X",
+            type: "select",
+            proxies: ["Proxy", "DIRECT", "HK-自动", "HK-手动", "TW-自动", "TW-手动", "JP-自动", "JP-手动", "SG-自动", "SG-手动", "US-自动", "US-手动",  "KR-自动", "KR-手动", "UK-自动", "UK-手动", "FR-自动", "FR-手动","DE-自动", "DE-手动", "0.x-自动"],
+            icon: "https://cdn.jsdelivr.net/gh/Alex-repositories/icons_02@main/Twitter.png"
+        },
     ];
     groups.push(...autoProxyGroups);
     groups.push(...manualProxyGroupsConfig);
@@ -586,25 +650,25 @@ function overwriteRules(params) {
     ];
 
     const serviceRuleSets = [
-        "RULE-SET,youtube,Proxy",
-        "RULE-SET,google,Proxy",
-        "RULE-SET,netflix,Proxy",
-        "RULE-SET,tiktok,Proxy",
-        "RULE-SET,meta,Proxy",
+        "RULE-SET,youtube,YouTube",
+        "RULE-SET,google,Google",
+        "RULE-SET,netflix,Netflix",
+        "RULE-SET,tiktok,TikTok",
+        "RULE-SET,meta,Instagram",
     ];
 
     const nonipRules = [
         "RULE-SET,cdn_domainset,Proxy",
         "RULE-SET,cdn_non_ip,Proxy",
         "RULE-SET,stream_non_ip,Proxy",
-        "RULE-SET,telegram_non_ip,Proxy",
+        "RULE-SET,telegram_non_ip,Telegram",
         "RULE-SET,apple_cdn,DIRECT",
         "RULE-SET,download_domainset,Proxy",
         "RULE-SET,download_non_ip,Proxy",
         "RULE-SET,microsoft_cdn_non_ip,DIRECT",
         "RULE-SET,apple_cn_non_ip,DIRECT",
-        "RULE-SET,apple_services,Proxy",
-        "RULE-SET,microsoft_non_ip,Proxy",
+        "RULE-SET,apple_services,Apple",
+        "RULE-SET,microsoft_non_ip,Microsoft",
         "RULE-SET,ai_non_ip,AIGC",
         "RULE-SET,global_non_ip,Proxy",
         "RULE-SET,domestic_non_ip,DIRECT",
@@ -614,7 +678,7 @@ function overwriteRules(params) {
 
     const ipRules = [
         "RULE-SET,reject_ip,REJECT",
-        "RULE-SET,telegram_ip,Proxy",
+        "RULE-SET,telegram_ip,Telegram",
         "RULE-SET,stream_ip,Proxy",
         "RULE-SET,lan_ip,DIRECT",
         "RULE-SET,domestic_ip,DIRECT",
