@@ -1,5 +1,5 @@
 // Clash极简分流脚本(过滤香港台湾两类限制较多的节点)
-const EXCLUDE_KEYWORDS_PATTERN = "邀请返佣|重新从网站获取订阅|公告信息|重置|套餐|剩余|到期|主页|官网|游戏|关注|网站|网址|地址|有效|香港|Hongkong|HK|台湾|台北|Taiwan|TW|禁止|邮箱|发布|客服|订阅|节点|问题|联系|https?:\\/\\/|\\.[a-z]{2,}";
+const EXCLUDE_KEYWORDS_PATTERN = "邀请返佣|重新从网站获取订阅|公告信息|重置|套餐|剩余|到期|主页|官网|游戏|关注|网站|网址|地址|有效|禁止|邮箱|发布|客服|订阅|节点|问题|联系|https?:\\/\\/|\\.[a-z]{2,}";
 const globalExcludeKeywords = new RegExp(`(${EXCLUDE_KEYWORDS_PATTERN})`, "i");
 
 function main(params) {
@@ -258,22 +258,13 @@ function overwriteProxyGroups(params) {
             name: "Auto",
             type: "select",
             icon: "https://cdn.jsdelivr.net/gh/Alex-repositories/icons_02@main/Auto.png",
-            proxies: ["All-自动", "HK-自动", "TW-自动", "JP-自动", "SG-自动", "US-自动", "KR-自动", "UK-自动", "FR-自动", "DE-自动", "0.x-自动"],
+            proxies: ["HK-自动", "TW-自动", "JP-自动", "SG-自动", "US-自动", "KR-自动", "UK-自动", "FR-自动", "DE-自动", "0.x-自动"],
         },
         {
             name: "Select",
             type: "select",
             icon: "https://cdn.jsdelivr.net/gh/Alex-repositories/icons_02@main/Select.png",
             proxies: safeAllProxies,
-        },
-        {
-            name: "All-自动",
-            type: "url-test",
-            url: "https://cp.cloudflare.com/generate_204",
-            interval: 900,
-            tolerance: 50,
-            proxies: safeAllProxies,
-            hidden: true,
         }
     ];
     
